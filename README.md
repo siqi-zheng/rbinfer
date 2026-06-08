@@ -2,7 +2,7 @@
 
 A Python library for **Relative Belief (RB) inference** in Poisson signal-plus-background counting experiments, implementing the Evans (2015) framework.
 
-The library covers the full workflow: prior elicitation → RB ratio computation → plausible intervals → prior-data conflict checking → bias-in-favor / bias-against sweeps over a signal grid.
+The library covers the full workflow: prior elicitation → experimental design (sample size calculation) → prior-data conflict checking → RB ratio computation → plausible intervals → bias-in-favor / bias-against.
 
 ---
 
@@ -29,11 +29,7 @@ pip install -e ".[dev]"
 ## Quickstart
 
 ```python
-from rbinfer import (
-    elicit_gamma_prior,
-    rb_plausible_interval_fixed_b,
-    check_prior_data_conflict_nuisance_exact,
-)
+from rbinfer import *
 
 # 1. Elicit a Gamma prior: mode = 5, 99% mass in [3, 10]
 alpha, rate = elicit_gamma_prior(mode_target=5.0, x_lower=3.0, x_upper=10.0, verbose=True)
@@ -111,9 +107,9 @@ $$S(t) = \Pi\bigl( \text{RB}(\lambda \mid t) \leq \text{RB}(\lambda_0 \mid t) \b
 
 That is, the posterior probability of the true value of $\lambda$ has a relative belief ratio no larger than that obtained for $\lambda_0$.
 
-When there is evidence against the value $\lambda_0$, then a __small__ value of strength indicates a large belief that the true value of $\lambda$ is in the set $\{\lambda : \text{RB}(\lambda \mid t) \leq \text{RB}(\lambda_0 \mid t)\}$ and so there is strong evidence against $\lambda_0$. 
+When there is evidence against the value $\lambda_0$, then a __small__ value of strength indicates a large belief that the true value of $\lambda$ is in the set $\{\lambda : \text{RB}(\lambda \mid t) \leq \text{RB}(\lambda_0 \mid t)\}$ and so there is __strong__ evidence against $\lambda_0$. 
 
-When there is evidence in favor of the value $\lambda_0$, then a small value of strength indicates a large belief that the true value of $\lambda$ is in the set $\{\lambda : \text{RB}(\lambda \mid t) \leq \text{RB}(\lambda_0 \mid t)\}$ and so there is weak evidence in favor of $\lambda_0$.
+When there is evidence in favor of the value $\lambda_0$, then a __small__ value of strength indicates a large belief that the true value of $\lambda$ is in the set $\{\lambda : \text{RB}(\lambda \mid t) \leq \text{RB}(\lambda_0 \mid t)\}$ and so there is __weak__ evidence in favor of $\lambda_0$.
  
 ### Bias-in-Favor and Bias-Against
 
@@ -168,31 +164,6 @@ Results are saved as `bias_in_favor.csv` and `bias_in_favor_summary.csv` per run
 
 ---
 
-## Running Scripts
-
-Example scripts are in `scripts/`. Run directly from the project root:
-
-```bash
-python scripts/run_sweep.py
-```
-
----
-
-## Testing
-
-```bash
-# Fast tests only (development)
-pytest -m "not slow"
-
-# Full suite with coverage
-pytest --cov=rbinfer
-
-# Single module
-pytest tests/test_inference.py -v
-```
-
----
-
 ## Dependencies
 
 | Package | Purpose |
@@ -203,7 +174,7 @@ pytest tests/test_inference.py -v
 | `matplotlib >= 3.7` | Bias curve plots |
 | `tqdm >= 4.60` | Parallel sweep progress bars |
 
-> **Note:** `winreg` (used in `_compat.py` for `find_rscript`) is a Windows standard library module and is not listed as a pip dependency.
+> **Note:** `winreg` (used in `_compat.py` for `find_rscript`) to run the r script `run_fcci.R` is a Windows standard library module and is not listed as a pip dependency.
 
 ---
 
