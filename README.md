@@ -4,6 +4,22 @@ A Python library for **Relative Belief (RB) inference** in Poisson signal-plus-b
 
 The library covers the full workflow: prior elicitation → experimental design (sample size calculation) → prior-data conflict checking → RB ratio computation → plausible intervals → bias-in-favor / bias-against.
 
+## Citation
+
+If you use `rbinfer` or the analysis scripts in your research, please cite our paper:
+
+```bibtex
+@misc{evans2026confidencestatisticalevidencerelative,
+      title={Confidence, Statistical Evidence and Relative Belief with Applications to a Problem in Particle Physics}, 
+      author={Michael Evans and Siqi Zheng},
+      year={2026},
+      eprint={2606.10256},
+      archivePrefix={arXiv},
+      primaryClass={physics.data-an},
+      url={https://arxiv.org/abs/2606.10256}, 
+}
+```
+
 ---
 
 ## Installation
