@@ -44,7 +44,7 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["rb_inference*"]
+include = ["rbinfer*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -54,5 +54,5 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["rb_inference"]
-omit = ["rb_inference/_compat.py"]
+source = ["rbinfer"]
+omit = ["rbinfer/_compat.py"]

@@ -9,7 +9,7 @@ from ._likelihoods import (
     _log_prior_pred_vb
 )
 
-def _auto_lambda_max(alpha: float, scale: float,
+def auto_lambda_max(alpha: float, scale: float,
                      t: int, n_sample: float,
                      factor: float = 8.0) -> float:
     """
@@ -188,7 +188,7 @@ def rb_plausible_interval_fixed_b(
       "credible_region" : (lower, upper) | None
     """
     if lambda_max is None:
-        lambda_max = _auto_lambda_max(alpha, scale, t, n_sample)
+        lambda_max = auto_lambda_max(alpha, scale, t, n_sample)
 
     lambda_grid = np.linspace(lambda_min, lambda_max, n_grid)
     rb, log_m_t = rb_ratio_fixed_b(lambda_grid, t, alpha, scale, b, n_sample)
@@ -318,7 +318,7 @@ def rb_plausible_interval_variable_b(
     dict  (same keys as rb_plausible_interval_fixed_b)
     """
     if lambda_max is None:
-        lambda_max = _auto_lambda_max(alpha_lam, scale_lam, t, n_sample)
+        lambda_max = auto_lambda_max(alpha_lam, scale_lam, t, n_sample)
 
     lambda_grid = np.linspace(lambda_min, lambda_max, n_grid)
     rb, log_m_t = rb_ratio_variable_b(
@@ -380,7 +380,7 @@ def rb_plausible_interval_fixed_b_fast_accurate(
     rb_cutoff: float = 1.0,
 ) -> dict:
     if lambda_max is None:
-        lambda_max = _auto_lambda_max(alpha, scale, t, n_sample)
+        lambda_max = auto_lambda_max(alpha, scale, t, n_sample)
 
     # ── Phase 1: COARSE grid — find interval endpoints ──────────────────────
     grid_coarse = np.linspace(lambda_min, lambda_max, n_grid_coarse)
@@ -442,7 +442,7 @@ def rb_plausible_interval_variable_b_fast_accurate(
     refine_width: float = 0.05,
 ) -> dict:
     if lambda_max is None:
-        lambda_max = _auto_lambda_max(alpha_lam, scale_lam, t, n_sample)
+        lambda_max = auto_lambda_max(alpha_lam, scale_lam, t, n_sample)
 
     # ── Phase 1: COARSE grid — find boundary brackets ───────────────────────
     grid_coarse = np.linspace(lambda_min, lambda_max, n_grid_coarse)
@@ -524,7 +524,7 @@ def strength_at_a_point_fixed_b(
     """
     
     if lambda_max is None:
-        lambda_max = _auto_lambda_max(alpha_lam, scale_lam, t, n_sample)
+        lambda_max = auto_lambda_max(alpha_lam, scale_lam, t, n_sample)
 
     lambda_grid = np.linspace(lambda_min, lambda_max, n_grid)
     cutoff = rb_ratio_fixed_b(
@@ -612,7 +612,7 @@ def strength_at_a_point_variable_b(
     """
     
     if lambda_max is None:
-        lambda_max = _auto_lambda_max(alpha_lam, scale_lam, t, n_sample)
+        lambda_max = auto_lambda_max(alpha_lam, scale_lam, t, n_sample)
 
     lambda_grid = np.linspace(lambda_min, lambda_max, n_grid)
     cutoff = rb_ratio_variable_b(

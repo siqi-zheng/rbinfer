@@ -154,12 +154,6 @@ def elicit_gamma_prior(mode_target, x_lower, x_upper,
 
     return alpha_sol, 1/scale_sol
 
-b = 12.3
-b_rel = 0.6
-alpha, beta = elicit_gamma_prior(b, b*(1-b_rel/b), b*(1+b_rel/b),.95)
-import math
-print(alpha, beta)
-
 def poisson_prefactor(t):
     """c_t = sup_u P(Poisson(u)=t-1)."""
     if t < 1 or int(t) != t:
@@ -179,5 +173,3 @@ def gamma_mad(alpha, beta):
 def bound(t, alpha, beta):
     return poisson_prefactor(t) * gamma_mad(alpha, beta)
 
-for t in [11]:
-    print(f"t={t:2d}, bound={bound(t, alpha, beta)}")

@@ -31,7 +31,7 @@ pip install -e ".[dev]"
 ```python
 from rbinfer import *
 
-# 1. Elicit a Gamma prior: mode = 5, 99% mass in [3, 10]
+# 1. Elicit a gamma prior: mode = 5, 99% mass in [3, 10]
 alpha, rate = elicit_gamma_prior(mode_target=5.0, x_lower=3.0, x_upper=10.0, verbose=True)
 scale = 1.0 / rate
 
@@ -78,11 +78,11 @@ Two observation models are supported:
 
 **Fixed background** — background rate `b` is known:
 
-$$T \mid \lambda \sim \text{Poisson}\bigl(n \cdot (\lambda + b)\bigr), \qquad \lambda \sim \text{Gamma}(\alpha, \text{scale})$$
+$$T \mid \lambda \sim \text{Poisson}\bigl(n \cdot (\lambda + b)\bigr), \qquad \lambda \sim \text{gamma}_{rate}(\tau_1, \tau_2)$$
 
 **Variable background** — background rate `b` is unknown with its own prior:
 
-$$T \mid \lambda, b \sim \text{Poisson}\bigl(n \cdot (\lambda + b)\bigr), \quad \lambda \sim \text{Gamma}(\alpha_\lambda, s_\lambda), \quad b \sim \text{Gamma}(\alpha_b, s_b)$$
+$$T \mid \lambda, b \sim \text{Poisson}\bigl(n \cdot (\lambda + b)\bigr), \quad \lambda \sim \text{gamma}_{rate}(\tau_1, \tau_2), \quad b \sim \text{gamma}_{rate}(\varsigma_1, \varsigma_2)$$
 
 ### Relative Belief Ratio
 
@@ -110,6 +110,8 @@ That is, the posterior probability of the true value of $\lambda$ has a relative
 When there is evidence against the value $\lambda_0$, then a __small__ value of strength indicates a large belief that the true value of $\lambda$ is in the set $\{\lambda : \text{RB}(\lambda \mid t) \leq \text{RB}(\lambda_0 \mid t)\}$ and so there is __strong__ evidence against $\lambda_0$. 
 
 When there is evidence in favor of the value $\lambda_0$, then a __small__ value of strength indicates a large belief that the true value of $\lambda$ is in the set $\{\lambda : \text{RB}(\lambda \mid t) \leq \text{RB}(\lambda_0 \mid t)\}$ and so there is __weak__ evidence in favor of $\lambda_0$.
+
+A discussion about Bayesian Hypothesis Testing can be found here: https://siqi-zheng.github.io/blog/rb-inference-1
  
 ### Bias-in-Favor and Bias-Against
 
@@ -130,7 +132,7 @@ For the fixed-background model, the marginal $m(t)$ is computed exactly as a **N
 ```python
 from rbinfer import elicit_gamma_prior, elicit_exp_rate
 
-# Gamma prior: mode = 8, 95% mass in [6.4, 9.6]
+# gamma prior: mode = 8, 95% mass in [6.4, 9.6]
 alpha, rate = elicit_gamma_prior(mode_target=8.0, x_lower=6.4, x_upper=9.6,
                                   target_prob=0.95, verbose=True)
 
@@ -161,6 +163,16 @@ sweep_and_plot_bif(
 ```
 
 Results are saved as `bias_in_favor.csv` and `bias_in_favor_summary.csv` per run, with an overlay plot saved as a PNG.
+
+---
+
+## Running Scripts
+
+Example scripts are in `scripts/`. Run directly from the project root:
+
+```bash
+python "scripts/example 3.1.py"
+```
 
 ---
 
