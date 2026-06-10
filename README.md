@@ -51,23 +51,21 @@ from rbinfer import *
 alpha, rate = elicit_gamma_prior(mode_target=5.0, x_lower=3.0, x_upper=10.0, verbose=True)
 scale = 1.0 / rate
 
-# 2. Compute the RB plausible interval for observed count t = 12
+# 2. Prior-data conflict check
+pvalue, in_central, q_lo, q_hi = check_prior_data_conflict_nuisance_exact(
+    t_obs=12, alpha=alpha, scale=scale, b=2.0, n_sample=1.0
+)
+print(f"p-value = {pvalue:.4f}, 95% predictive band = [{q_lo}, {q_hi}]")
+
+# 3. Compute the RB plausible interval for observed count t = 12
 result = rb_plausible_interval_fixed_b(
     t=12, alpha=alpha, scale=scale,
-    b=2.0, n_sample=1.0,
-    gamma_credible=0.95,
+    b=2.0, n_sample=1.0
 )
 
 print(result["interval"])        # plausible interval  { λ : RB(λ|t) > 1 }
 print(result["rb_estimate"])     # MLE  =  argmax RB(λ|t)
 print(result["strength"])        # S(t) = Π( Pl(t) | t )
-print(result["credible_region"]) # 95 % γ-credible RB interval
-
-# 3. Prior-data conflict check
-pvalue, in_central, q_lo, q_hi = check_prior_data_conflict_nuisance_exact(
-    t_obs=12, alpha=alpha, scale=scale, b=2.0, n_sample=1.0
-)
-print(f"p-value = {pvalue:.4f}, 95% predictive band = [{q_lo}, {q_hi}]")
 ```
 
 ---
@@ -104,7 +102,7 @@ $$T \mid \lambda, b \sim \text{Poisson}\bigl(n \cdot (\lambda + b)\bigr), \quad 
 
 The core identity (Evans 2015):
 
-$$\text{RB}(\lambda \mid t) = \frac{\pi(\lambda \mid t)}{\pi(\lambda)} = \frac{m(t \mid \lambda)}{m(t)}$$
+$$\text{RB}(\lambda \mid t) = \frac{\pi(\lambda \mid t)}{\pi(\lambda)}$$
 
 where $m(t \mid \lambda)$ is the marginal likelihood and $m(t)$ is the prior predictive.
 
@@ -131,11 +129,11 @@ A discussion about Bayesian Hypothesis Testing can be found here: https://siqi-z
  
 ### Bias-in-Favor and Bias-Against
 
-For hypothesis $H_0 : \lambda = \lambda_0$ evaluated at a perturbation $\pm\delta$:
+For hypothesis $H_0 : \lambda = \lambda_0$ evaluated at practical significance (difference that matters scientifically) $\pm\delta$:
 
 $$\text{BiF}_\pm(\lambda_0) = \sum_{t : \text{RB}(\lambda_0 \mid t) \geq 1} f(t \mid \lambda_0 \pm \delta)$$
 
-$$\text{BaGA}(\lambda_0) = \sum_{t : \text{RB}(\lambda_0 \mid t) < 1} f(t \mid \lambda_0)$$
+$$\text{BaG}(\lambda_0) = \sum_{t : \text{RB}(\lambda_0 \mid t) < 1} f(t \mid \lambda_0)$$
 
 ### Prior Marginal — Exact Convolution
 
